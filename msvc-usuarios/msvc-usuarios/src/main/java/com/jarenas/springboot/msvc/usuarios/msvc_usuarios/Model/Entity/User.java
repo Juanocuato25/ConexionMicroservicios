@@ -2,6 +2,9 @@ package com.jarenas.springboot.msvc.usuarios.msvc_usuarios.Model.Entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.net.URI;
 
@@ -13,9 +16,15 @@ public class User {
     private Long id;
 
     @Basic
+    @NotBlank
     private String name;
+
+    @NotEmpty
     @Column(unique = true)
+    @Email
     private String email;
+
+    @NotBlank
     private String password;
 
     public Long getId() {
