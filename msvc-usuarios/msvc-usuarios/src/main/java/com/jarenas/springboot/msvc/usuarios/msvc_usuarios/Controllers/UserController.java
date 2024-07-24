@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/users")
@@ -22,14 +20,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> listar(){
+    public ResponseEntity<?> listar() {
         return ResponseEntity.ok(userService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> detalle(@PathVariable Long id){
+    public ResponseEntity<?> detalle(@PathVariable Long id) {
         Optional<User> optionalUser = userService.porId(id);
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             return ResponseEntity.ok(optionalUser.get());
         }
         return ResponseEntity.notFound().build();
@@ -37,22 +35,37 @@ public class UserController {
 
     @PostMapping
     //@ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> crear(@Valid @RequestBody User user, BindingResult result){
+    public ResponseEntity<?> crear(@Valid @RequestBody User user, BindingResult result) {
+
         if (result.hasErrors()) {
             return validar(result);
         }
+
+        if (!user.getEmail().isBlank() && userService.existePorEmail(user.getEmail())) {
+            return ResponseEntity.badRequest()
+                    .body(Collections
+                            .singletonMap("error", "Ya existe un usuario con ese correo ingresado!"));
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.guardar(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@Valid @RequestBody User user, BindingResult result, @PathVariable Long id ){
-        if (result.hasErrors()){
+    public ResponseEntity<?> editar(@Valid @RequestBody User user, BindingResult result, @PathVariable Long id) {
+
+        if (result.hasErrors()) {
             return validar(result);
         }
 
         Optional<User> ou = userService.porId(id);
-        if (ou.isPresent()){
+        if (ou.isPresent()) {
             User userDB = ou.get();
+
+            if (!user.getEmail().isBlank() && !user.getEmail().equalsIgnoreCase(userDB.getEmail()) && userService.porEmail(user.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest()
+                        .body(Collections
+                                .singletonMap("error", "Ya existe un usuario con ese correo ingresado!"));
+            }
             userDB.setName(user.getName());
             userDB.setEmail(user.getEmail());
             userDB.setPassword(user.getPassword());
@@ -62,9 +75,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         Optional<User> optionalUser = userService.porId(id);
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             userService.eliminar(id);
             return ResponseEntity.noContent().build();
         }
@@ -74,7 +87,7 @@ public class UserController {
 
     private static ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
-        result.getFieldErrors().forEach(error ->{
+        result.getFieldErrors().forEach(error -> {
             errores.put(error.getField(), "El campo " + error.getField() + " " + error.getDefaultMessage());
         });
         return ResponseEntity.badRequest().body(errores);
