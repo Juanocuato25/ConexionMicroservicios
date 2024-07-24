@@ -1,6 +1,7 @@
 package com.org.jarenas.springcloud.msvc.cursos.Service;
 
 import com.org.jarenas.springcloud.msvc.cursos.Model.Entity.Curso;
+import com.org.jarenas.springcloud.msvc.cursos.Model.Usuario;
 import com.org.jarenas.springcloud.msvc.cursos.Repository.CursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,20 @@ public class CursoServiceImpl implements CursoService{
     @Transactional
     public void eliminar(Long id) {
         cursoRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Usuario> asignarUsuario(Usuario usuario, Long Cursoid) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> crearUsuario(Usuario usuario, Long Cursoid) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> eliminarUsuario(Usuario usuario, Long Cursoid) {
+        return Optional.empty();
     }
 }
