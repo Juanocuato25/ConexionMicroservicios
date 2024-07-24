@@ -52,4 +52,10 @@ public class UserServiceImpl implements UserService{
     public boolean existePorEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> listarPorIds(Iterable<Long> ids) {
+        return (List<User>) userRepository.findAllById(ids);
+    }
 }

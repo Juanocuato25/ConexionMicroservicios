@@ -28,9 +28,18 @@ public class CursoController {
         return ResponseEntity.ok(cursoService.listar());
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public ResponseEntity<?> detalle(@PathVariable Long id) {
         Optional<Curso> o = cursoService.porId(id);
+        if (o.isPresent()) {
+            return ResponseEntity.ok(o.get());
+        }
+        return ResponseEntity.notFound().build();
+    }*/
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> detalleUsuarios(@PathVariable Long id) {
+        Optional<Curso> o = cursoService.porIdConUsuarios(id);
         if (o.isPresent()) {
             return ResponseEntity.ok(o.get());
         }

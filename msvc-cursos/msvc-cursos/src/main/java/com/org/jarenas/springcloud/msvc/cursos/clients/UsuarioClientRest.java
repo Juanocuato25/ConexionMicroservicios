@@ -21,6 +21,7 @@ public interface UsuarioClientRest {
     @PutMapping
     Usuario editar(@RequestBody Usuario usuario, @PathVariable Long id);
 
-
+    @GetMapping("/usuarios-por-curso")
+    List<Usuario> obtenerAlumnosPorCurso(@RequestParam Iterable<Long> ids);
 
 }
