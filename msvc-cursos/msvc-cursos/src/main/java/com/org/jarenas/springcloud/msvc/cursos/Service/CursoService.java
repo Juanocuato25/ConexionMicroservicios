@@ -12,8 +12,8 @@ public interface CursoService {
     Curso guardar(Curso curso);
     void eliminar(Long id);
 
-    Optional<Usuario> asignarUsuario(Usuario usuario, Long Cursoid);
-    Optional<Usuario> crearUsuario(Usuario usuario, Long Cursoid);
-    Optional<Usuario> eliminarUsuario(Usuario usuario, Long Cursoid);
+    Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoid);
+    Optional<Usuario> crearUsuario(Usuario usuario, Long cursoid);
+    Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoid);
 
 }
