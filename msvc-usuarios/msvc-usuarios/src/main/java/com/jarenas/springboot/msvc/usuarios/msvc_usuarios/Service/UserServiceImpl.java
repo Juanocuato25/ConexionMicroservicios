@@ -1,5 +1,6 @@
 package com.jarenas.springboot.msvc.usuarios.msvc_usuarios.Service;
 
+import com.jarenas.springboot.msvc.usuarios.msvc_usuarios.Clients.CursoClienteRest;
 import com.jarenas.springboot.msvc.usuarios.msvc_usuarios.Model.Entity.User;
 import com.jarenas.springboot.msvc.usuarios.msvc_usuarios.Repository.UserRepository;
 
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CursoClienteRest clienteRest;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void eliminar(Long id) {
         userRepository.deleteById(id);
+        clienteRest.eliminarCursoUsuario(id);
     }
 
     @Override
